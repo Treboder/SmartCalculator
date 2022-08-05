@@ -12,7 +12,7 @@ public interface Validation {
     String ERR_INVALID_EXPRESSION = "Invalid expression";
     String ERR_INVALID_ASSIGNMENT = "Invalid assignment";
     String ERR_INVALID_IDENTIFIER = "Invalid identifier";
-    String ERR_UNKNOWN_VARIABLE = "Unknown variable";
+    String ERR_UNKNOWN_VARIABLE = "Invalid expression";//"Unknown variable";
     String ERR_UNKNOWN_COMMAND = "Unknown command";
 
     boolean checkExpression(String expression);
