@@ -1,30 +1,57 @@
 package calculator
 
-fun main() {
+import java.util.*
 
-    while(true) {
-
-        var inputRaw = readLine()!!
-        if(inputRaw == "/exit")
-            break
-        else if (inputRaw == "/help")
-            println("The program calculates the sum of numbers")
-
-        var inputSplitted = inputRaw.split(" ")
-        if(inputSplitted.count() == 1) {
-            if(inputSplitted.first().isNotEmpty() && !inputSplitted.first().isBlank())
-                println(inputSplitted.first())
-        }
-        else
-        {
-            var sum = 0
-            for(value in inputSplitted)
-                if(value.isNotEmpty() && !value.isBlank())
-                    sum += value.toInt()
-            println(sum)
-        }
-
+object Main {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val app = Application()
+        app.menu()
     }
-    println("Bye!")
+}
 
+internal class Application {
+    private val calculator: Calculator
+    fun menu() {
+        val sc = Scanner(System.`in`)
+        while (true) {
+            val line = sc.nextLine().trim { it <= ' ' }.replace("\\s+".toRegex(), " ")
+            if (line.isBlank()) {
+                continue
+            }
+            if (ACTION_EXIT == line) {
+                break
+            }
+            if (ACTION_HELP == line) {
+                printHelp()
+                continue
+            }
+            if (line[0] == '/') {
+                println(Validation.ERR_UNKNOWN_COMMAND)
+                continue
+            }
+            if (line.contains("=")) {
+                calculator.doAssignment(line)
+                continue
+            }
+            if (calculator.setExpression(line)) {
+                println(calculator.calculate())
+            }
+        }
+        println("Bye!")
+        sc.close()
+    }
+
+    fun printHelp() {
+        println("The program calculates the sum and difference of numbers.")
+    }
+
+    companion object {
+        private const val ACTION_EXIT = "/exit"
+        private const val ACTION_HELP = "/help"
+    }
+
+    init {
+        calculator = PostfixCalculator()
+    }
 }
